@@ -90,11 +90,11 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	function displayWeather(){
 		if(edina.complete && shitport.complete){
 			controller.storage.users.get(message.user, function(err, user) {        
-				bot.reply(message, 'Looks like it\'s ' + shitport.data.temp_f +
-				'° F with ' + shitport.data.relative_humidity + ' humidity in Shreveport right now :unamused:'
+				bot.reply(message, 'Shreveport: ' + shitport.data.temp_f +
+				'° F with ' + shitport.data.relative_humidity + ' humidity. ' + shitport.data.wind_mph + ' mph wind, current conditions: '+ shitport.data.weather
 				);
-				bot.reply(message, 'Compared to ' + edina.data.temp_f +
-				'° F with ' + edina.data.relative_humidity + ' humidity in Edina :joy:'
+				bot.reply(message, 'Edina: ' + edina.data.temp_f +
+				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
 				);
 			});
 			
@@ -130,8 +130,8 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather'], 'di
 			
 			if(parsedData.current_observation != null){
 				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, 'Looks like it\'s ' + parsedData.current_observation.temp_f +
-					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity in ' + location[0] + ' right now.'
+					bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
+					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
 					);				
 				});
 			}
