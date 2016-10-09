@@ -37,11 +37,11 @@ controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
 
 controller.hears(['weatherbot help', 'help weatherbot'], ['ambient'], function (bot, message) {
   bot.reply(message, 'Sup :sunglasses:')
-  bot.reply(message, 'If you want me to tell you the weather, just say "weather in <city>, <state>", or "<city>, <state> weather".')
+  bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
 })
 
 controller.hears(['help'], ['direct_message'], function (bot, message){
-  bot.reply(message, 'If you want me to tell you the weather, just say "weather in <city>, <state>", or "<city>, <state> weather".')
+  bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
 })
 
 controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
@@ -50,10 +50,6 @@ controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
 
 controller.hears('.*', ['mention'], function (bot, message) {
   bot.reply(message, 'You really do care about me! :heart:')
-})
-
-controller.hears('hello weatherbot', ['ambient'], function (bot, message){
-  bot.reply(message, 'mention test success :sunglasses:')
 })
 
 controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
@@ -121,7 +117,7 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	};
 });
 
-controller.hears(['weather in (.*)','(.*) weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
     var rawLocation = message.match[1];
     var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
@@ -131,13 +127,22 @@ controller.hears(['weather in (.*)','(.*) weather'], 'direct_message,direct_ment
 	request(url, function(error, response, data){
 		if (!error && response.statusCode == 200){
 			var parsedData = JSON.parse(data);
-			controller.storage.users.get(message.user, function(err, user) {        
-				bot.reply(message, 'Looks like it\'s ' + parsedData.current_observation.temp_f +
-				'° F with ' + parsedData.current_observation.relative_humidity + ' humidity in ' + location[0] + ' right now.'
-				);				
-			});
+			
+			if(data != 'undefined'){
+				controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, 'Looks like it\'s ' + parsedData.current_observation.temp_f +
+					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity in ' + location[0] + ' right now.'
+					);				
+				});
+			}
+			else{
+				controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
+					);				
+				});
+			}
 		}
-	});
+	};
 });
 
 controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
