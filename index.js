@@ -32,50 +32,114 @@ controller.on('bot_channel_join', function (bot, message) {
 })
 
 controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
-  bot.reply(message, 'Hello.')
+  bot.reply(message, ':eyes: :partly_sunny_rain:?')
 })
 
+controller.hears(['weatherbot help', 'help weatherbot'], ['ambient'], function (bot, message) {
+  bot.reply(message, 'Sup :sunglasses:')
+  bot.reply(message, 'If you want me to tell you the weather, just say "weather in <city>, <state>", or "<city>, <state> weather".')
+})
+
+controller.hears(['help'], ['direct_message'], function (bot, message){
+  bot.reply(message, 'If you want me to tell you the weather, just say "weather in <city>, <state>", or "<city>, <state> weather".')
+}
+
 controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
-  bot.reply(message, 'Hello.')
-  bot.reply(message, 'It\'s nice to talk to you directly.')
+  bot.reply(message, 'Hello! If you me to tell you my syntax, say help :sunglasses:')
 })
 
 controller.hears('.*', ['mention'], function (bot, message) {
   bot.reply(message, 'You really do care about me! :heart:')
 })
 
-controller.hears('help', ['direct_message', 'direct_mention'], function (bot, message) {
-  var help = 'I will respond to the following messages: \n' +
-      '`bot hi` for a simple message.\n' +
-      '`bot attachment` to see a Slack attachment message.\n' +
-      '`@<your bot\'s name>` to demonstrate detecting a mention.\n' +
-      '`bot help` to see this again.'
-  bot.reply(message, help)
-})
-
 controller.hears('hello weatherbot', ['ambient'], function (bot, message){
   bot.reply(message, 'mention test success :sunglasses:')
 })
 
-controller.hears(['attachment'], ['direct_message', 'direct_mention'], function (bot, message) {
-  var text = 'Beep Beep Boop is a ridiculously simple hosting platform for your Slackbots.'
-  var attachments = [{
-    fallback: text,
-    pretext: 'We bring bots to life. :sunglasses: :thumbsup:',
-    title: 'Host, deploy and share your bot in seconds.',
-    image_url: 'https://storage.googleapis.com/beepboophq/_assets/bot-1.22f6fb.png',
-    title_link: 'https://beepboophq.com/',
-    text: text,
-    color: '#7CD197'
-  }]
+controller.hears(['weather in (.*)','(.*) weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+    var rawLocation = message.match[1];
+    var location = rawLocation.split(',');
+	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
+	
+	var request = require('request');
+	
+	request(url, function(error, response, data){
+		if (!error && response.statusCode == 200){
+			var parsedData = JSON.parse(data);
+			controller.storage.users.get(message.user, function(err, user) {        
+				bot.reply(message, 'Looks like it\'s ' + parsedData.current_observation.temp_f +
+				'° F with ' + parsedData.current_observation.relative_humidity + ' humidity in ' + location[0] + ' right now.'
+				);				
+			});
+		}
+	});
+});
 
-  bot.reply(message, {
-    attachments: attachments
-  }, function (err, resp) {
-    console.log(err, resp)
-  })
-})
+controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention, ambient', function(bot, message) {
+	var EventEmitter = require("events").EventEmitter;
+	var edina = new EventEmitter();
+	var shitport = new EventEmitter();
+	
+    bot.api.reactions.add({
+        timestamp: message.ts,
+        channel: message.channel,
+        name: 'sunny',
+    }, function(err, res) {
+        if (err) {
+            bot.botkit.log('Failed to add emoji reaction :(', err);
+        }
+    });
+
+	var edinaRequest = require('request');
+	edinaRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/MN/Edina.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			edina.data = JSON.parse(data);
+			edina.data = edina.data.current_observation;
+			edina.complete = true;
+			displayWeather();
+		}
+	});
+	
+	var shitportRequest = require('request');
+	shitportRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/LA/Shreveport.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			shitport.data = JSON.parse(data);
+			shitport.data = shitport.data.current_observation;
+			shitport.complete = true;
+			displayWeather();
+		}
+	});
+	
+	function displayWeather(){
+		if(edina.complete && shitport.complete){
+			controller.storage.users.get(message.user, function(err, user) {        
+				bot.reply(message, 'Looks like it\'s ' + shitport.data.temp_f +
+				'° F with ' + shitport.data.relative_humidity + ' humidity in Shreveport right now :unamused:'
+				);
+				bot.reply(message, 'Compared to ' + edina.data.temp_f +
+				'° F with ' + edina.data.relative_humidity + ' humidity in Edina :joy:'
+				);
+			});
+			
+			uniqueWeatherChecks();	
+		}
+	}
+	
+	function uniqueWeatherChecks(){
+		if(edina.data.temp_f > shitport.data.temp_f){
+				controller.storage.users.get(message.user, function(err, user) {        
+						bot.reply(message, '(Edina is actually hotter? Hell finally froze over, huh? :joy: :sob:)');
+				});
+		}
+			
+		if(edina.data.relative_humidity >= shitport.data.relative_humidity){
+			controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, '(:whew: So Edina gets humid too, huh?)');
+			});
+		}	
+	};
+});
 
 controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
-  bot.reply(message, 'Sorry <@' + message.user + '>, I don\'t understand. \n')
+  bot.reply(message, 'Hmm, I don\'t understand. If you want me to show you my syntax, say help :+1:')
 })
