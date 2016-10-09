@@ -138,7 +138,7 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather'], 'di
 			else{
 				controller.storage.users.get(message.user, function(err, user) {        
 					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
-				)};				
+				});				
 			}
 		}
 	});
