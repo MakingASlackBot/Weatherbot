@@ -75,7 +75,7 @@ controller.hears(['weather in (.*)','(.*) weather'], 'direct_message,direct_ment
 	});
 });
 
-controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention, ambient', function(bot, message) {
+controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
 	var EventEmitter = require("events").EventEmitter;
 	var edina = new EventEmitter();
 	var shitport = new EventEmitter();
