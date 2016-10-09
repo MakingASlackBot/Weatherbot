@@ -93,7 +93,7 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 				bot.reply(message, 'Shreveport: ' + shitport.data.temp_f +
 				'° F with ' + shitport.data.relative_humidity + ' humidity. ' + shitport.data.wind_mph + ' mph wind, current conditions: '+ shitport.data.weather
 				);
-				bot.reply(message, 'Edina: ' + edina.data.temp_f +
+				bot.reply(message, 'Edina:     ' + edina.data.temp_f +
 				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
 				);
 			});
