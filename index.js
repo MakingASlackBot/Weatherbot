@@ -42,7 +42,7 @@ controller.hears(['weatherbot help', 'help weatherbot'], ['ambient'], function (
 
 controller.hears(['help'], ['direct_message'], function (bot, message){
   bot.reply(message, 'If you want me to tell you the weather, just say "weather in <city>, <state>", or "<city>, <state> weather".')
-}
+})
 
 controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
   bot.reply(message, 'Hello! If you me to tell you my syntax, say help :sunglasses:')
