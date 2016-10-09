@@ -128,7 +128,7 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather'], 'di
 		if (!error && response.statusCode == 200){
 			var parsedData = JSON.parse(data);
 			
-			if(data != null){
+			if(parsedData.current_observation != null){
 				controller.storage.users.get(message.user, function(err, user) {        
 					bot.reply(message, 'Looks like it\'s ' + parsedData.current_observation.temp_f +
 					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity in ' + location[0] + ' right now.'
