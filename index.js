@@ -164,7 +164,7 @@ controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, mess
 			}
 			else{
 				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
+					bot.reply(message, 'Sorry,  I\'m not finding any data for ' + rawLocation + ' right now :whew:');
 				});				
 			}
 		}
