@@ -55,7 +55,7 @@ controller.hears('.*', ['mention'], function (bot, message) {
 controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
 	var EventEmitter = require("events").EventEmitter;
 	var edina = new EventEmitter();
-	var shitport = new EventEmitter();
+	var shreveport = new EventEmitter();
 	
     bot.api.reactions.add({
         timestamp: message.ts,
@@ -77,21 +77,21 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 		}
 	});
 	
-	var shitportRequest = require('request');
-	shitportRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/LA/Shreveport.json', function(error, response, data){
+	var shreveportRequest = require('request');
+	shreveportRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/LA/Shreveport.json', function(error, response, data){
 		if (!error && response.statusCode == 200){
-			shitport.data = JSON.parse(data);
-			shitport.data = shitport.data.current_observation;
-			shitport.complete = true;
+			shreveport.data = JSON.parse(data);
+			shreveport.data = shreveport.data.current_observation;
+			shreveport.complete = true;
 			displayWeather();
 		}
 	});
 	
 	function displayWeather(){
-		if(edina.complete && shitport.complete){
+		if(edina.complete && shreveport.complete){
 			controller.storage.users.get(message.user, function(err, user) {        
-				bot.reply(message, 'Shreveport: ' + shitport.data.temp_f +
-				'° F with ' + shitport.data.relative_humidity + ' humidity. ' + shitport.data.wind_mph + ' mph wind, current conditions: '+ shitport.data.weather
+				bot.reply(message, 'Shreveport: ' + shreveport.data.temp_f +
+				'° F with ' + shreveport.data.relative_humidity + ' humidity. ' + shreveport.data.wind_mph + ' mph wind, current conditions: '+ shreveport.data.weather
 				);
 				bot.reply(message, 'Edina:           ' + edina.data.temp_f +
 				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
@@ -103,13 +103,13 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	}
 	
 	function uniqueWeatherChecks(){
-		if(edina.data.temp_f > shitport.data.temp_f){
+		if(edina.data.temp_f > shreveport.data.temp_f){
 				controller.storage.users.get(message.user, function(err, user) {        
 						bot.reply(message, '(Edina is actually hotter? Hell finally froze over, huh? :joy: :sob:)');
 				});
 		}
 			
-		if(edina.data.relative_humidity >= shitport.data.relative_humidity){
+		if(edina.data.relative_humidity >= shreveport.data.relative_humidity){
 			controller.storage.users.get(message.user, function(err, user) {        
 					bot.reply(message, '(:whew: So Edina gets humid too, huh?)');
 			});
@@ -117,7 +117,7 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	};
 });
 
-controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, (.*)','wb (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
     var rawLocation = message.match[1];
     var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
@@ -145,5 +145,28 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather'], 'di
 });
 
 controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
-  bot.reply(message, 'Hmm, I don\'t understand. If you want me to show you my syntax, say help :+1:')
+  var rawLocation = message.match[1];
+    var location = rawLocation.split(',');
+	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
+	
+	var request = require('request');
+	
+	request(url, function(error, response, data){
+		if (!error && response.statusCode == 200){
+			var parsedData = JSON.parse(data);
+			
+			if(parsedData.current_observation != null){
+				controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
+					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
+					);				
+				});
+			}
+			else{
+				controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
+				});				
+			}
+		}
+	});
 })
