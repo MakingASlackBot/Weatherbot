@@ -107,13 +107,7 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 				controller.storage.users.get(message.user, function(err, user) {        
 						bot.reply(message, '(Edina is actually hotter? Hell finally froze over, huh? :joy: :sob:)');
 				});
-		}
-			
-		if(edina.data.relative_humidity >= shreveport.data.relative_humidity){
-			controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, '(:whew: So Edina gets humid too, huh?)');
-			});
-		}	
+		}				
 	};
 });
 
@@ -144,8 +138,8 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 	});
 });
 
-controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
-  var rawLocation = message.match[1];
+controller.hears('(.*)', ['direct_message', 'direct_mention'], function (bot, message) {
+    var rawLocation = message.match[1];
     var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
 	
