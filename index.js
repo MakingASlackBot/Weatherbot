@@ -38,6 +38,7 @@ controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
 controller.hears(['weatherbot help', 'help weatherbot'], ['ambient'], function (bot, message) {
   bot.reply(message, 'Sup :sunglasses:')
   bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
+  bot.reply(message, '"wb <city>,<state>" also works. Or if you\'re talking to me directly, just "<city>,<state>"')
 })
 
 controller.hears(['help'], ['direct_message'], function (bot, message){
@@ -87,14 +88,53 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 		}
 	});
 	
+	var copenhagenRequest = require('request');
+	copenhagenRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/DK/copenhagen.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			copenhagen.data = JSON.parse(data);
+			copenhagen.data = copenhagen.data.current_observation;
+			copenhagen.complete = true;
+			displayWeather();
+		}
+	});
+	
+	var tokyoRequest = require('request');
+	tokyoRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/jp/tokyo.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			tokyo.data = JSON.parse(data);
+			tokyo.data = tokyo.data.current_observation;
+			tokyo.complete = true;
+			displayWeather();
+		}
+	});
+	
+	var brusselsRequest = require('request');
+	brusselsRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/be/brussels.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			brussels.data = JSON.parse(data);
+			brussels.data = brussels.data.current_observation;
+			brussels.complete = true;
+			displayWeather();
+		}
+	});
+	
 	function displayWeather(){
-		if(edina.complete && shreveport.complete){
+		if(edina.complete && shreveport.complete && copenhagen.complete && tokyo.complete && brussels.complete){
 			controller.storage.users.get(message.user, function(err, user) {        
 				bot.reply(message, 'Shreveport: ' + shreveport.data.temp_f +
 				'° F with ' + shreveport.data.relative_humidity + ' humidity. ' + shreveport.data.wind_mph + ' mph wind, current conditions: '+ shreveport.data.weather
 				);
 				bot.reply(message, 'Edina:           ' + edina.data.temp_f +
 				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
+				);
+				bot.reply(message, 'Copenhagen: ' + copenhagen.data.temp_f +
+				'° F with ' + copenhagen.data.relative_humidity + ' humidity. ' + copenhagen.data.wind_mph + ' mph wind, current conditions: '+ copenhagen.data.weather
+				);
+				bot.reply(message, 'Tokyo: ' + tokyo.data.temp_f +
+				'° F with ' + tokyo.data.relative_humidity + ' humidity. ' + tokyo.data.wind_mph + ' mph wind, current conditions: '+ tokyo.data.weather
+				);
+				bot.reply(message, 'Brussels: ' + brussels.data.temp_f +
+				'° F with ' + brussels.data.relative_humidity + ' humidity. ' + brussels.data.wind_mph + ' mph wind, current conditions: '+ brussels.data.weather
 				);
 			});
 			
