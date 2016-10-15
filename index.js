@@ -62,6 +62,12 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	var tokyo = new EventEmitter();
 	var brussels = new EventEmitter();
 	
+	var copenhagenTime = calculateTime(newDate(), 7, 1);
+	var tokyoTime = calculateTime(newDate(), 14, 1);
+	var brusselsTime = calculate(newDate(), 7, 1);
+	
+	
+	
     bot.api.reactions.add({
         timestamp: message.ts,
         channel: message.channel,
@@ -138,7 +144,7 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 				'° F with ' + tokyo.data.relative_humidity + ' humidity. ' + tokyo.data.wind_mph + ' mph wind, current conditions: '+ tokyo.data.weather
 				);
 				bot.reply(message, 'Brussels: ' + brussels.data.temp_f +
-				'° F with ' + brussels.data.relative_humidity + ' humidity. ' + brussels.data.wind_mph + ' mph wind, current conditions: '+ brussels.data.weather
+				'° F with ' + brussels.data.relative_humidity + ' humidity. ' + brussels.data.wind_mph + ' mph wind, current conditions: '+ brussels.data.weather + ' . Local time: ' + brusselsTime;
 				);
 			});
 			
@@ -153,6 +159,22 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 				});
 		}				
 	};
+	
+	function calculateTime(date,hourDifference,ahead){
+		var localTime;
+		if (ahead == 0){
+			hourDifference = -Math.abs(hourDifference);
+		}
+		
+		localTime.hour = date.getHours() + hourDifference;
+		if(date.hour > 24){
+			localTime.hour = localTime.hour % 24;
+		}
+		if(localTime.hour < 0){
+			localTime.hour += 24;
+		}
+		return date.hour + ':' + date.minute;
+	}
 });
 
 controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, (.*)','wb (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
