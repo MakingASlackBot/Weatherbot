@@ -87,8 +87,18 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 		}
 	});
 	
+	var copenhagenRequest = require('request');
+	copenhagenRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/DK/copenhagen.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			copenhagen.data = JSON.parse(data);
+			copenhagen.data = copenhagen.data.current_observation;
+			copenhagen.complete = true;
+			displayWeather();
+		}
+	});
+	
 	function displayWeather(){
-		if(edina.complete && shreveport.complete){
+		if(edina.complete && shreveport.complete && copenhagen.complete){
 			controller.storage.users.get(message.user, function(err, user) {        
 				bot.reply(message, 'Shreveport: ' + shreveport.data.temp_f +
 				'° F with ' + shreveport.data.relative_humidity + ' humidity. ' + shreveport.data.wind_mph + ' mph wind, current conditions: '+ shreveport.data.weather
