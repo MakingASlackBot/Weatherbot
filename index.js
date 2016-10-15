@@ -62,9 +62,11 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	var tokyo = new EventEmitter();
 	var brussels = new EventEmitter();
 	
-	var copenhagenTime = calculateTime(newDate(), 7, 1);
-	var tokyoTime = calculateTime(newDate(), 14, 1);
-	var brusselsTime = calculate(newDate(), 7, 1);
+	var date = new Date();
+	
+	var copenhagenTime = calculateTime(date, 7, 1);
+	var tokyoTime = calculateTime(date, 14, 1);
+	var brusselsTime = calculate(date, 7, 1);
 	
 	
 	
