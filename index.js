@@ -1,6 +1,7 @@
 var Botkit = require('botkit')
 
 var token = process.env.SLACK_TOKEN
+var googleAPI = 'AIzaSyA58H0IRDs77XKEpHCnYtccOd6URU0CqGg'; 
 
 var controller = Botkit.slackbot({
   // reconnect to Slack RTM when connection goes bad
@@ -57,6 +58,10 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	var edina = new EventEmitter();
 	var shreveport = new EventEmitter();
 	
+	var copenhagen = new EventEmitter();
+	var tokyo = new EventEmitter();
+	var brussels = new EventEmitter();
+	
     bot.api.reactions.add({
         timestamp: message.ts,
         channel: message.channel,
@@ -97,14 +102,43 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 		}
 	});
 	
+	var tokyoRequest = require('request');
+	tokyoRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/JP/tokyo.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			tokyo.data = JSON.parse(data);
+			tokyo.data = tokyo.data.current_observation;
+			tokyo.complete = true;
+			displayWeather();
+		}
+	});
+	
+	var brusselsRequest = require('request');
+	brusselsRequest('http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/BE/brussels.json', function(error, response, data){
+		if (!error && response.statusCode == 200){
+			brussels.data = JSON.parse(data);
+			brussels.data = brussels.data.current_observation;
+			brussels.complete = true;
+			displayWeather();
+		}
+	});
+	
 	function displayWeather(){
-		if(edina.complete && shreveport.complete && copenhagen.complete){
+		if(edina.complete && shreveport.complete && copenhagen.complete && tokyo.complete && brussels.complete){
 			controller.storage.users.get(message.user, function(err, user) {        
 				bot.reply(message, 'Shreveport: ' + shreveport.data.temp_f +
 				'° F with ' + shreveport.data.relative_humidity + ' humidity. ' + shreveport.data.wind_mph + ' mph wind, current conditions: '+ shreveport.data.weather
 				);
 				bot.reply(message, 'Edina:           ' + edina.data.temp_f +
 				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
+				);
+				bot.reply(message, 'Copenhagen: ' + copenhagen.data.temp_f +
+				'° F with ' + copenhagen.data.relative_humidity + ' humidity. ' + copenhagen.data.wind_mph + ' mph wind, current conditions: '+ copenhagen.data.weather
+				);
+				bot.reply(message, 'Tokyo: ' + tokyo.data.temp_f +
+				'° F with ' + tokyo.data.relative_humidity + ' humidity. ' + tokyo.data.wind_mph + ' mph wind, current conditions: '+ tokyo.data.weather
+				);
+				bot.reply(message, 'Brussels: ' + brussels.data.temp_f +
+				'° F with ' + brussels.data.relative_humidity + ' humidity. ' + brussels.data.wind_mph + ' mph wind, current conditions: '+ brussels.data.weather
 				);
 			});
 			
