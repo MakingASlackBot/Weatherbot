@@ -45,7 +45,7 @@ var j = schedule.scheduleJob(rule,function(bot){
 			channel: 'G26FCMMKL'
 		}
 	);
-}
+})
 
 controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
