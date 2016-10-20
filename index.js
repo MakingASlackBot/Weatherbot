@@ -143,6 +143,7 @@ controller.hears(['what up weatherfam?', 'wup', 'detailed wup', 'bitch tell me d
 				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
 				);
 			});
+			uniqueWeatherChecks();	
 		}
 		if(detailed && copenhagen.complete && tokyo.complete && brussels.complete){
 			controller.storage.users.get(message.user, function(err, user) {        				
@@ -157,7 +158,6 @@ controller.hears(['what up weatherfam?', 'wup', 'detailed wup', 'bitch tell me d
 				);
 			});
 		}
-		uniqueWeatherChecks();	
 	}
 	
 	function uniqueWeatherChecks(){
