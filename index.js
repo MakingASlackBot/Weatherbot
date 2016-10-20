@@ -54,7 +54,7 @@ controller.hears('.*', ['mention'], function (bot, message) {
 })
 
 controller.hears(['what up weatherfam?', 'wup', 'detailed wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
-	var detailed = (message.match[1] === "detailed wup");
+	var detailed = (message.match == "detailed wup");
 	var EventEmitter = require("events").EventEmitter;
 	var edina = new EventEmitter();
 	var shreveport = new EventEmitter();
