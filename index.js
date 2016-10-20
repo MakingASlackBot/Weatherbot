@@ -38,14 +38,14 @@ controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, "I'm here!")
 })
 
-var j = schedule.scheduleJob(rule,function(bot){
-	bot.say(
-		{
-			text: 'it's 5am and i probably fucked this up :joy: ',
-			channel: 'G26FCMMKL'
-		}
-	);
-})
+//var j = schedule.scheduleJob(rule,function(bot){
+//	bot.say(
+//		{
+//			text: 'it's 5am and i probably fucked this up :joy: ',
+//			channel: 'G26FCMMKL'
+//		}
+//	);
+//})
 
 controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
