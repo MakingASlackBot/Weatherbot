@@ -143,7 +143,7 @@ controller.hears(['what up weatherfam?', 'wup', 'detailed wup', 'bitch tell me d
 				bot.reply(message, 'Edina:           ' + edina.data.temp_f +
 				'° F with ' + edina.data.relative_humidity + ' humidity. ' + edina.data.wind_mph + ' mph wind, current conditions: '+ edina.data.weather
 				);
-				bot.reply(message, message.match);
+				bot.reply(message, message.match[1]);
 			});
 			uniqueWeatherChecks();	
 		}
