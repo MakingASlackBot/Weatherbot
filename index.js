@@ -1,7 +1,13 @@
 var Botkit = require('botkit')
 
 var token = process.env.SLACK_TOKEN
-var googleAPI = 'AIzaSyA58H0IRDs77XKEpHCnYtccOd6URU0CqGg'; 
+var schedule = require('node-schedule');
+
+var rule = new schedule.RecurrenceRule();
+rule.dayofWeek = [1, new schedule.Range(2,5)];
+rule.hour = 5;
+rule.minute = 0;
+
 
 var controller = Botkit.slackbot({
   // reconnect to Slack RTM when connection goes bad
@@ -31,6 +37,14 @@ if (token) {
 controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, "I'm here!")
 })
+
+var j = schedule.scheduleJob(rule,function(){
+	bot.say(
+	{
+		text: 'it's 5am and i probably fucked this up :joy: ',
+		channel: 'G26FCMMKL'
+	}
+}
 
 controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
