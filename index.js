@@ -1,12 +1,12 @@
 var Botkit = require('botkit')
 
 var token = process.env.SLACK_TOKEN
-var schedule = require('node-schedule');
+//var schedule = require('node-schedule');
 
-var rule = new schedule.RecurrenceRule();
-rule.dayofWeek = [1, new schedule.Range(2,5)];
-rule.hour = 5;
-rule.minute = 0;
+//var rule = new schedule.RecurrenceRule();
+//rule.dayofWeek = [1, new schedule.Range(2,5)];
+//rule.hour = 5;
+//rule.minute = 0;
 
 
 var controller = Botkit.slackbot({
