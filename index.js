@@ -35,13 +35,14 @@ controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
 })
 
-controller.hears(['weatherbot help', 'help weatherbot'], ['ambient'], function (bot, message) {
+controller.hears(['weatherbot help', 'help weatherbot','wb help'], ['ambient'], function (bot, message) {
   bot.reply(message, 'Sup :sunglasses:')
   bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
 })
 
 controller.hears(['help'], ['direct_message'], function (bot, message){
   bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
+  bot.reply(message, 'Or just "wb, <city>, <state>')
 })
 
 controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
@@ -204,6 +205,19 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 		}
 	});
 });
+
+controller.hears(['wb, forecast (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+	var location = rawLocation.split(',');
+	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
+	request(url, function(error, response, data){
+		if (!error && response.statusCode == 200){
+			var parsedData = JSON.parse(data);
+			
+			if(parsedData.forecastday != null){
+				bot.reply(message, location[0] + ': ' + parsedData.forecastday[0].title;
+			}
+	}
+}
 
 controller.hears('(.*)', ['direct_message', 'direct_mention'], function (bot, message) {
     var rawLocation = message.match[1];
