@@ -179,6 +179,23 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	}
 });
 
+controller.hears(['wb, forecast (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+	var location = rawLocation.split(',');
+	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
+	request(url, function(error, response, data){
+		if (!error && response.statusCode == 200){
+			var parsedData = JSON.parse(data);
+			
+			if(parsedData.forecastday != null){
+				controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, location[0] + ': ' + parsedData.forecast.txt_forecast.forecastday[0].title);
+				});				
+			}
+		}
+	});
+});
+
+
 controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, (.*)','wb (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
     var rawLocation = message.match[1];
     var location = rawLocation.split(',');
@@ -200,22 +217,6 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 			else{
 				controller.storage.users.get(message.user, function(err, user) {        
 					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
-				});				
-			}
-		}
-	});
-});
-
-controller.hears(['wb, forecast (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
-	var location = rawLocation.split(',');
-	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
-	request(url, function(error, response, data){
-		if (!error && response.statusCode == 200){
-			var parsedData = JSON.parse(data);
-			
-			if(parsedData.forecastday != null){
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, location[0] + ': ' + parsedData.forecast.txt_forecast.forecastday[0].title);
 				});				
 			}
 		}
