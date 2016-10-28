@@ -180,6 +180,7 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 });
 
 controller.hears(['wb, forecast (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+	var request = require('request');
 	var rawLocation = message.match[1];
 	var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
