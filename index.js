@@ -193,7 +193,7 @@ controller.hears(['wb forecast (.*)'], 'direct_message,direct_mention,mention,am
 					//bot.reply(message, location[0] + ' forecast: ' + //parsedData.forecast.txt_forecast.forecastday[0].title
 					//);	
 					bot.reply(message, 'hello');					
-				});
+				});  //asdf
 			}
 			
 			//if(parsedData.forecast != null){
