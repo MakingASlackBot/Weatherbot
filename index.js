@@ -214,8 +214,12 @@ controller.hears(['wb, forecast (.*)'], 'direct_message,direct_mention,mention,a
 			var parsedData = JSON.parse(data);
 			
 			if(parsedData.forecastday != null){
-				bot.reply(message, location[0] + ': ' + parsedData.forecastday[0].title;
+				controller.storage.users.get(message.user, function(err, user) {        
+					bot.reply(message, location[0] + ': ' + parsedData.forecastday[0].title;
+				});
+				
 			}
+		}
 	}
 }
 
