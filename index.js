@@ -190,7 +190,7 @@ controller.hears(['wb forecast (.*)'], 'direct_message,direct_mention,mention,am
 			
 			if(parsedData.forecast != null){
 				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, 'Today's ' + location[0] + ' forecast: ' + parsedData.forecast.txt_forecast.forecastday[0].title + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[0].title );
+					bot.reply(message, 'Today\'s ' + location[0] + ' forecast: ' + parsedData.forecast.txt_forecast.forecastday[0].title + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[0].title );
 				});  
 			}
 			
