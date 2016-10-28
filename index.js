@@ -219,7 +219,7 @@ controller.hears(['wb, forecast (.*)'], 'direct_message,direct_mention,mention,a
 				});				
 			}
 		}
-	}
+	});
 }
 
 controller.hears('(.*)', ['direct_message', 'direct_mention'], function (bot, message) {
