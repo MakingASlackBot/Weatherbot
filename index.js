@@ -189,14 +189,14 @@ controller.hears(['wb forecast (.*)'], 'direct_message,direct_mention,mention,am
 			var parsedData = JSON.parse(data);
 			
 			if(parsedData.forecast != null){
-				if(location[3] == null){
+				if(location[2] == null){
 					controller.storage.users.get(message.user, function(err, user) {        
-						bot.reply(message, 'Today\'s ' + location[0] + ' forecast: ' + parsedData.forecast.txt_forecast.forecastday[0].title + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[0].title );
+						bot.reply(message, 'Today\'s ' + location[0] + ' forecast: ' + parsedData.forecast.txt_forecast.forecastday[0].fcttext + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[0].pop );
 						});			
 				}
 				else{
 					controller.storage.users.get(message.user, function(err, user) {        
-							bot.reply(message, location[0] + ' forecast for ' + location[3] + ' days from now: ' + parsedData.forecast.txt_forecast.forecastday[location[3]].fcttext + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[3].pop);
+							bot.reply(message, location[0] + ' forecast for ' + location[2] + ' days from now: ' + parsedData.forecast.txt_forecast.forecastday[location[2]].fcttext + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[location[2]].pop);
 						});						
 				}
 			}
