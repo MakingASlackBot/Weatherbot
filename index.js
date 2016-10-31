@@ -239,6 +239,7 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 	});
 });
 
+//some change, did it not build right?
 //forecast direct message
 controller.hears(['fc (.*)','forecast (.*)'], 'direct_message,direct_mention', function (bot, message) {
 	var request = require('request');
