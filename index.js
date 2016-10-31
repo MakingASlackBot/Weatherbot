@@ -240,7 +240,7 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 });
 
 //forecast direct message
-controller.hears(['fc (.*)','forecast (.*)', 'direct_message,direct_mention', function (bot, message) {
+controller.hears(['fc (.*)','forecast (.*)'], 'direct_message,direct_mention', function (bot, message) {
 	var request = require('request');
 	var rawLocation = message.match[1];
 	var location = rawLocation.split(',');
