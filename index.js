@@ -31,28 +31,34 @@ controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, "I'm here!")
 })
 
-controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
+//shitport
+controller.hears(['wb shitport', 'wb shitport,la']), ['ambient','direct_message'], function (bot, message){
+	bot.reply(message, 'I\'m working on it :sob:')
+}
+
+
+controller.hears(['mashed potato','mashed potatoes'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
 })
 
+//help ambient
 controller.hears(['weatherbot help', 'help weatherbot','wb help'], ['ambient'], function (bot, message) {
   bot.reply(message, 'Sup :sunglasses:')
   bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
 })
 
+//help direct message
 controller.hears(['help'], ['direct_message'], function (bot, message){
   bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
   bot.reply(message, 'Or just "wb, <city>, <state>')
 })
 
+//hello
 controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
   bot.reply(message, 'Hello! If you me to tell you my syntax, say help :sunglasses:')
 })
 
-controller.hears('.*', ['mention'], function (bot, message) {
-  bot.reply(message, 'You really do care about me! :heart:')
-})
-
+//wup
 controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
 	var EventEmitter = require("events").EventEmitter;
 	var edina = new EventEmitter();
@@ -179,7 +185,8 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	}
 });
 
-controller.hears(['wb forecast (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
+//forecast ambient message
+controller.hears(['wb forecast (.*)','wb fc (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
 	var request = require('request');
 	var rawLocation = message.match[1];
 	var location = rawLocation.split(',');
@@ -204,7 +211,7 @@ controller.hears(['wb forecast (.*)'], 'direct_message,direct_mention,mention,am
 	});
 });
 
-
+//weather ambient message
 controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, (.*)','wb (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
     var rawLocation = message.match[1];
     var location = rawLocation.split(',');
@@ -232,6 +239,33 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 	});
 });
 
+//forecast direct message
+controller.hears(['fc (.*)','forecast (.*)', 'direct_message,direct_mention', function (bot, message) {
+	var request = require('request');
+	var rawLocation = message.match[1];
+	var location = rawLocation.split(',');
+	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
+	request(url, function(error, response, data){
+		if (!error && response.statusCode == 200){
+			var parsedData = JSON.parse(data);
+			
+			if(parsedData.forecast != null){
+				if(location[2] == null){
+					controller.storage.users.get(message.user, function(err, user) {        
+						bot.reply(message, 'Today\'s ' + location[0] + ' forecast: ' + parsedData.forecast.simpleforecast.forecastday[0].conditions + '. High is ' + parsedData.forecast.simpleforecast.forecastday[0].high.fahrenheit + ', low is ' + parsedData.forecast.simpleforecast.forecastday[0].low.fahrenheit + '. ' + parsedData.forecast.simpleforecast.forecastday[0].avewind.mph + ' mph wind, ' + parsedData.forecast.simpleforecast.forecastday[0].avehumidity + '% humidity. Chance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[0].pop + '%, ' +  parsedData.forecast.simpleforecast.forecastday[0].snow_allday + ' inches of snow.');
+						});			
+				}
+				else{
+					controller.storage.users.get(message.user, function(err, user) {       
+							bot.reply(message, location[0] + ' forecast for ' + location[2] + ' days from now: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].conditions + '. High is ' + parsedData.forecast.simpleforecast.forecastday[location[2]].high.fahrenheit + ', low is ' + parsedData.forecast.simpleforecast.forecastday[location[2]].low.fahrenheit + '. ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avewind.mph + ' mph wind, ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avehumidity + '% humidity. Chance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].pop + '%, ' +  parsedData.forecast.simpleforecast.forecastday[location[2]].snow_allday + ' inches of snow.');
+						});						
+				}
+			}
+		}
+	});
+});
+
+//weather direct message
 controller.hears('(.*)', ['direct_message', 'direct_mention'], function (bot, message) {
     var rawLocation = message.match[1];
     var location = rawLocation.split(',');
