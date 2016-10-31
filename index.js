@@ -31,11 +31,6 @@ controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, "I'm here!")
 })
 
-//shitport
-controller.hears(['wb shitport', 'wb shitport,la']), ['ambient','direct_message'], function (bot, message){
-	bot.reply(message, 'I\'m working on it :sob:')
-}
-
 
 controller.hears(['mashed potato','mashed potatoes'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
