@@ -59,15 +59,16 @@ controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
 
 //wup
 controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
-	messageCreator.getWeather(bot,message,controller,'Shreveport,LA');
-	messageCreator.getWeather(bot,message,controller,'Edina,MN');
-	messageCreator.getWeather(bot,message,controller,'Copenhagen,DK');
-	messageCreator.getWeather(bot,message,controller,'Tokyo,JP');
-	messageCreator.getWeather(bot,message,controller,'Brussels,BE');
+	bot.reply(message, ':construction: Wup is under construction, try back later :construction:');
+	// messageCreator.getWeather(bot,message,controller,'Shreveport,LA');
+	// messageCreator.getWeather(bot,message,controller,'Edina,MN');
+	// messageCreator.getWeather(bot,message,controller,'Copenhagen,DK');
+	// messageCreator.getWeather(bot,message,controller,'Tokyo,JP');
+	// messageCreator.getWeather(bot,message,controller,'Brussels,BE');
 });
 
 //forecast ambient message
-controller.hears(['wb forecast (.*)','wb fc (.*)'], 'ambient', function(bot, message) {
+controller.hears(['wb forecast (.*)','wb fc (.*)'], 'ambient,direct_message,direct_mention', function(bot, message) {
 	messageCreator.getForecast(bot,message,controller,message.match[1]);
 });
 
