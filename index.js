@@ -33,7 +33,7 @@ controller.on('bot_channel_join', function (bot, message) {
 })
 
 controller.hears(['wb shitport'], ['ambient,direct_message'], function (bot, message) {
-  messageCreator.getWeather(bot,'Shreveport,LA');
+  messageCreator.getWeather(bot,'Shreveport,LA',controller);
 })
 
 controller.hears(['mashed potato','mashed potatoes'], ['direct_mention'], function (bot, message) {
