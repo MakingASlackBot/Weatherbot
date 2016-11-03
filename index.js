@@ -1,4 +1,5 @@
 var Botkit = require('botkit')
+var messageCreator = require('messageCreator.js');
 
 var token = process.env.SLACK_TOKEN
 
@@ -31,6 +32,9 @@ controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, "I'm here!")
 })
 
+controller.hears(['wb shitport'], ['ambient,direct_message'], function (bot, message) {
+  messageCreator.getWeather(bot,'Shreveport,LA');
+})
 
 controller.hears(['mashed potato','mashed potatoes'], ['direct_mention'], function (bot, message) {
   bot.reply(message, ':eyes: :partly_sunny_rain:?')
