@@ -1,5 +1,5 @@
 var Botkit = require('botkit')
-var messageCreator = require('messageCreator.js');
+var messageCreator = require('./messageCreator');
 
 var token = process.env.SLACK_TOKEN
 
