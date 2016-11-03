@@ -185,29 +185,8 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 });
 
 //forecast ambient message
-controller.hears(['wb forecast (.*)','wb fc (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
-	var request = require('request');
-	var rawLocation = message.match[1];
-	var location = rawLocation.split(',');
-	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
-	request(url, function(error, response, data){
-		if (!error && response.statusCode == 200){
-			var parsedData = JSON.parse(data);
-			
-			if(parsedData.forecast != null){
-				if(location[2] == null){
-					controller.storage.users.get(message.user, function(err, user) {        
-						bot.reply(message, 'Today\'s ' + location[0] + ' forecast: ' + parsedData.forecast.txt_forecast.forecastday[0].fcttext + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[0].pop );
-						});			
-				}
-				else{
-					controller.storage.users.get(message.user, function(err, user) {        
-							bot.reply(message, location[0] + ' forecast for ' + location[2] + ' days from now: ' + parsedData.forecast.txt_forecast.forecastday[location[2]].fcttext + '. Chance of rain: ' + parsedData.forecast.txt_forecast.forecastday[location[2]].pop);
-						});						
-				}
-			}
-		}
-	});
+controller.hears(['wb forecast (.*)','wb fc (.*)'], 'ambient', function(bot, message) {
+	messageCreator.getForecast(bot,message,controller,message.match[1]);
 });
 
 //weather ambient message
@@ -217,29 +196,9 @@ controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, 
 
 //some change, did it not build right?
 //forecast direct message
-controller.hears(['fc (.*)','forecast (.*)'], 'direct_message,direct_mention', function (bot, message) {
-	var request = require('request');
-	var rawLocation = message.match[1];
-	var location = rawLocation.split(',');
-	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
-	request(url, function(error, response, data){
-		if (!error && response.statusCode == 200){
-			var parsedData = JSON.parse(data);
-			
-			if(parsedData.forecast != null){
-				if(location[2] == null){
-					controller.storage.users.get(message.user, function(err, user) {        
-						bot.reply(message, 'Today\'s ' + location[0] + ' forecast: ' + parsedData.forecast.simpleforecast.forecastday[0].conditions + '. High is ' + parsedData.forecast.simpleforecast.forecastday[0].high.fahrenheit + ', low is ' + parsedData.forecast.simpleforecast.forecastday[0].low.fahrenheit + '. ' + parsedData.forecast.simpleforecast.forecastday[0].avewind.mph + ' mph wind, ' + parsedData.forecast.simpleforecast.forecastday[0].avehumidity + '% humidity. Chance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[0].pop + '%. Plan for ' +  parsedData.forecast.simpleforecast.forecastday[0].snow_allday.in + ' inches of snow.');
-						});			
-				}
-				else{
-					controller.storage.users.get(message.user, function(err, user) {       
-							bot.reply(message, location[0] + ' forecast for ' + location[2] + ' days from now: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].conditions + '. High is ' + parsedData.forecast.simpleforecast.forecastday[location[2]].high.fahrenheit + ', low is ' + parsedData.forecast.simpleforecast.forecastday[location[2]].low.fahrenheit + '. ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avewind.mph + ' mph wind, ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avehumidity + '% humidity. Chance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].pop + '%. Plan for ' +  parsedData.forecast.simpleforecast.forecastday[location[2]].snow_allday.in + ' inches of snow.');
-						});						
-				}
-			}
-		}
-	});
+controller.hears(['fc (.*)','forecast (.*)'], 'direct_message,direct_mention', function (bot, message)
+{
+	messageCreator.getForecast(bot,message,controller,message.match[1]);
 });
 
 //weather direct message
