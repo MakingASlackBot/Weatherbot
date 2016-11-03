@@ -28,4 +28,4 @@ messageCreator.prototype.getWeather = function(bot, message){
 	});
 }
 
-module.export = new messageCreator();
+module.exports = new messageCreator();
