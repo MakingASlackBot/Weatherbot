@@ -212,30 +212,7 @@ controller.hears(['wb forecast (.*)','wb fc (.*)'], 'direct_message,direct_menti
 
 //weather ambient message
 controller.hears(['weatherbot, weather in (.*)','weatherbot, (.*) weather','wb, (.*)','wb (.*)'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
-    var rawLocation = message.match[1];
-    var location = rawLocation.split(',');
-	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
-	
-	var request = require('request');
-	
-	request(url, function(error, response, data){
-		if (!error && response.statusCode == 200){
-			var parsedData = JSON.parse(data);
-			
-			if(parsedData.current_observation != null){
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
-					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
-					);				
-				});
-			}
-			else{
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
-				});				
-			}
-		}
-	});
+    messageCreator.getWeather(bot,message,controller,message.match[1]);
 });
 
 //some change, did it not build right?
@@ -267,28 +244,5 @@ controller.hears(['fc (.*)','forecast (.*)'], 'direct_message,direct_mention', f
 
 //weather direct message
 controller.hears('(.*)', ['direct_message', 'direct_mention'], function (bot, message) {
-    var rawLocation = message.match[1];
-    var location = rawLocation.split(',');
-	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
-	
-	var request = require('request');
-	
-	request(url, function(error, response, data){
-		if (!error && response.statusCode == 200){
-			var parsedData = JSON.parse(data);
-			
-			if(parsedData.current_observation != null){
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
-					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
-					);				
-				});
-			}
-			else{
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
-				});				
-			}
-		}
-	});
+    messageCreator.getWeather(bot,message,controller,message.match[1]);
 })
