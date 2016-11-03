@@ -1,8 +1,8 @@
 var messageCreator = function () {};
 
 
-messageCreator.prototype.getWeather = function(bot, message,controller){
-	var rawLocation = message;
+messageCreator.prototype.getWeather = function(bot,message,controller,inputLocation){
+	var rawLocation = inputLocation;
 	var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
 	
