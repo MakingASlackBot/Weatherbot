@@ -74,11 +74,12 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 });
 
 function repeatWUP(bot,message,cotroller,wupArray,i){
-	messageCreator.getWeather(bot,message,controller,wupArray[i]).success(function() {
+	messageCreator.getWeather(bot,message,controller,wupArray[i]);
+
+}.success(function() {
 		if (i < wupArray.length-1){
 			repeatWUP(bot,message,controller,wupArray,i+1);
 		}
-	});
 }
 
 //forecast ambient message
