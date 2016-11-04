@@ -63,7 +63,11 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	var wupArray = ['Shreveport,LA','Edina,MN','Copenhagen,DK','Tokyo,JP','Brussels,BE'];
 	var i = 0;
 	//bot.reply(message, ':construction: Wup is under construction, try back later :construction:');
-	repeatWUP(bot,message,controller,wupArray,i);
+	repeatWUP(bot,message,controller,wupArray,i).success(function() {
+		if (i < wupArray.length-1){
+			repeatWUP(bot,message,controller,wupArray,i+1);
+		}
+};
 	
 	
 	
@@ -76,10 +80,6 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 function repeatWUP(bot,message,cotroller,wupArray,i){
 	messageCreator.getWeather(bot,message,controller,wupArray[i]);
 
-}.success(function() {
-		if (i < wupArray.length-1){
-			repeatWUP(bot,message,controller,wupArray,i+1);
-		}
 }
 
 //forecast ambient message
