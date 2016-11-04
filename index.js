@@ -78,7 +78,7 @@ function repeatWUP(bot,message,cotroller,wupArray,i){
 		if (i < wupArray.length-1){
 			repeatWUP(bot,message,controller,wupArray,i+1);
 		}
-	}
+	});
 }
 
 //forecast ambient message
