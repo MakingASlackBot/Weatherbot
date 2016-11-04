@@ -66,8 +66,8 @@ controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'di
 	repeatWUP(bot,message,controller,wupArray,i).success(function() {
 		if (i < wupArray.length-1){
 			repeatWUP(bot,message,controller,wupArray,i+1);
-		}
-};
+		};
+});
 	
 	
 	
