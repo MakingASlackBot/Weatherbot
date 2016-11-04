@@ -61,12 +61,12 @@ controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
 controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
 	wupArray = ['Shreveport,LA','Edina,MN','Copenhagen,DK','Tokyo,JP','Brussels,BE'];
 
-	messageCreate.getWeather(bot,message,controller,wupArray);
-	//messageCreator.getWeather(bot,message,controller,'Shreveport,LA');
-	//messageCreator.getWeather(bot,message,controller,'Edina,MN');
-	//messageCreator.getWeather(bot,message,controller,'Copenhagen,DK');
-	//messageCreator.getWeather(bot,message,controller,'Tokyo,JP');
-	//messageCreator.getWeather(bot,message,controller,'Brussels,BE');
+	//messageCreate.getWeather(bot,message,controller,wupArray);
+	messageCreator.getWeather(bot,message,controller,'Shreveport,LA');
+	messageCreator.getWeather(bot,message,controller,'Edina,MN');
+	messageCreator.getWeather(bot,message,controller,'Copenhagen,DK');
+	messageCreator.getWeather(bot,message,controller,'Tokyo,JP');
+	messageCreator.getWeather(bot,message,controller,'Brussels,BE');
 });
 
 //forecast ambient message

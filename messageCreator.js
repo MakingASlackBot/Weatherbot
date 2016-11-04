@@ -1,9 +1,9 @@
 var messageCreator = function () {};
 
 
-messageCreator.prototype.getWeather = function(bot,message,controller,locationArray, i){
+messageCreator.prototype.getWeather = function(bot,message,controller,inputLocation){
 	var request = require('request');
-	var rawLocation = locationArray[0];
+	var rawLocation = inputLocation;
 	var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/geolookup/conditions/q/' + location[1] + '/' + location[0] + '.json';
 	
@@ -25,11 +25,12 @@ messageCreator.prototype.getWeather = function(bot,message,controller,locationAr
 			}
 		}
 	});
-}.success(function() {
-		if (i < locationArray.length-1){
-			getWeather(bot,message,controller,wupArray,i+1);
-		};
-});
+}
+// }.success(function() {
+		// if (i < locationArray.length-1){
+			// getWeather(bot,message,controller,wupArray,i+1);
+		// };
+// });
 
 messageCreator.prototype.getForecast = function(bot,message,controller,inputLocation){
 	var request = require('request');
