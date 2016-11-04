@@ -59,13 +59,27 @@ controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
 
 //wup
 controller.hears(['what up weatherfam?', 'wup', 'bitch tell me da weather'], 'direct_message,direct_mention,mention,ambient', function(bot, message) {
-	bot.reply(message, ':construction: Wup is under construction, try back later :construction:');
-	// messageCreator.getWeather(bot,message,controller,'Shreveport,LA');
+	
+	var wupArray = ['Shreveport,LA','Edina,MN','Copenhagen,DK','Tokyo,JP','Brussels,BE'];
+	var i = 0;
+	//bot.reply(message, ':construction: Wup is under construction, try back later :construction:');
+	repeatWUP(bot,message,controller,wupArray,i);
+	
+	
+	
 	// messageCreator.getWeather(bot,message,controller,'Edina,MN');
 	// messageCreator.getWeather(bot,message,controller,'Copenhagen,DK');
 	// messageCreator.getWeather(bot,message,controller,'Tokyo,JP');
 	// messageCreator.getWeather(bot,message,controller,'Brussels,BE');
 });
+
+function repeatWUP(bot,message,cotroller,wupArray,i){
+	messageCreator.getWeather(bot,message,controller,wupArray[i]).success(function() {
+		if (i < wupArray.length-1){
+			repeatWUP(bot,message,controller,wupArray,i+1);
+		}
+	}
+}
 
 //forecast ambient message
 controller.hears(['wb forecast (.*)','wb fc (.*)'], 'ambient,direct_message,direct_mention', function(bot, message) {
