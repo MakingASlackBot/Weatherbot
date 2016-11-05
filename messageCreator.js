@@ -2,14 +2,14 @@ var messageCreator = function () {};
 
 
 messageCreator.prototype.getWeather = function(bot,message,controller,inputLocation){
-	var parsedData = wundergroundGet(inputLocation);
+	var rawLocation = inputLocation;
+	var location = rawLocation.split(',');
+	var parsedData = wundergroundGet(location);
 	parseForecastMessage(bot,message,controller,location,parsedData);
 }
 
-var wundergroundGet = function(inputLocation){
+var wundergroundGet = function(location){
 	var request = require('request');
-	var rawLocation = inputLocation;
-	var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
 	request(url, function(error, response, data){
 		if (!error && response.statusCode == 200){
@@ -20,8 +20,6 @@ var wundergroundGet = function(inputLocation){
 
 messageCreator.prototype.getForecast = function(bot,message,controller,inputLocation){
 	var request = require('request');
-	var rawLocation = inputLocation;
-	var location = rawLocation.split(',');
 	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
 	request(url, function(error, response, data){
 		if (!error && response.statusCode == 200){
