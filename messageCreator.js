@@ -15,6 +15,19 @@ messageCreator.prototype.getWeather = function(bot,message,controller,inputLocat
 	});
 }
 
+messageCreator.prototype.getForecast = function(bot,message,controller,inputLocation){
+	var request = require('request');
+	var rawLocation = inputLocation;
+	var location = rawLocation.split(',');
+	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
+	request(url, function(error, response, data){
+		if (!error && response.statusCode == 200){
+			var parsedData = JSON.parse(data);
+			parseForecastMessage(bot,message,controller,location,parsedData);
+		}
+	});
+}
+
 var parseWeatherMessage = function(bot,message,controller,location,parsedData){
 	if(parsedData.current_observation != null){
 		controller.storage.users.get(message.user, function(err, user) {        
@@ -44,19 +57,5 @@ var parseForecastMessage = function(bot,message,controller,location,parsedData){
 				}
 			}
 }
-
-messageCreator.prototype.getForecast = function(bot,message,controller,inputLocation){
-	var request = require('request');
-	var rawLocation = inputLocation;
-	var location = rawLocation.split(',');
-	var url = 'http://api.wunderground.com/api/e6d58e1b342bc28a/forecast/q/' + location[1] + '/' + location[0] + '.json';
-	request(url, function(error, response, data){
-		if (!error && response.statusCode == 200){
-			var parsedData = JSON.parse(data);
-			parseForecastMessage(bot,message,controller,location,parsedData);
-		}
-	});
-}
-
 
 module.exports = new messageCreator();
