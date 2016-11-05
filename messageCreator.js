@@ -15,7 +15,7 @@ messageCreator.prototype.getWeather = function(bot,message,controller,inputLocat
 	});
 }
 
-messageCreator.prototype.parseMessage = function(bot,message,controller,parsedData){
+var parseMessage = function(bot,message,controller,parsedData){
 	if(parsedData.current_observation != null){
 		controller.storage.users.get(message.user, function(err, user) {        
 			bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
