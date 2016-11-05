@@ -10,27 +10,25 @@ messageCreator.prototype.getWeather = function(bot,message,controller,inputLocat
 	request(url, function(error, response, data){
 		if (!error && response.statusCode == 200){
 			var parsedData = JSON.parse(data);
-			
-			if(parsedData.current_observation != null){
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
-					'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
-					);				
-				});
-			}
-			else{
-				controller.storage.users.get(message.user, function(err, user) {        
-					bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
-				});				
-			}
+			parseMessage(bot,message,controller,parsedData);
 		}
 	});
 }
-// }.success(function() {
-		// if (i < locationArray.length-1){
-			// getWeather(bot,message,controller,wupArray,i+1);
-		// };
-// });
+
+messageCreator.prototype.parseMessage = function(bot,message,controller,parsedData){
+	if(parsedData.current_observation != null){
+		controller.storage.users.get(message.user, function(err, user) {        
+			bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
+			'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
+			);				
+		});
+	}
+	else{
+		controller.storage.users.get(message.user, function(err, user) {        
+			bot.reply(message, 'Sorry, I\'m not finding any data for ' + rawLocation + ' right now :whew:');
+		});				
+	}
+}
 
 messageCreator.prototype.getForecast = function(bot,message,controller,inputLocation){
 	var request = require('request');
