@@ -10,12 +10,12 @@ messageCreator.prototype.getWeather = function(bot,message,controller,inputLocat
 	request(url, function(error, response, data){
 		if (!error && response.statusCode == 200){
 			var parsedData = JSON.parse(data);
-			parseMessage(bot,message,controller,parsedData);
+			parseMessage(bot,message,controller,location,parsedData);
 		}
 	});
 }
 
-var parseMessage = function(bot,message,controller,parsedData){
+var parseMessage = function(bot,message,controller,location,parsedData){
 	if(parsedData.current_observation != null){
 		controller.storage.users.get(message.user, function(err, user) {        
 			bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
