@@ -31,8 +31,8 @@ messageCreator.prototype.getForecast = function(bot,message,controller,inputLoca
 var parseWeatherMessage = function(bot,message,controller,location,parsedData){
 	if(parsedData.current_observation != null){
 		controller.storage.users.get(message.user, function(err, user) {        
-			bot.reply(message, location[0] + ': ' + parsedData.current_observation.temp_f +
-			'° F with ' + parsedData.current_observation.relative_humidity + ' humidity. ' + parsedData.current_observation.wind_mph + ' mph wind, current conditions: '+ parsedData.current_observation.weather
+			bot.reply(message, '```' + location[0] + '\nTemperature: ' + parsedData.current_observation.temp_f + '° F \nHumidity: ' + parsedData.current_observation.relative_humidity + '\nWind:' + parsedData.current_observation.wind_mph + ' mph \nCurrent Conditions: '+ 
+				parsedData.current_observation.weather + '```'
 			);				
 		});
 	}
