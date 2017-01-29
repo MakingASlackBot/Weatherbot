@@ -67,7 +67,7 @@ var parseForecastMessage = function(bot,message,controller,location,parsedData){
 				bot.reply(message, location[0].toUpperCase() + ' forecast for ' + location[2] + ' days from now: \n```' + 
 					'Conditions: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].conditions + 
 					'\nHigh: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].high.fahrenheit +
-					'\nLow: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].low.fahrenheit
+					'\nLow: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].low.fahrenheit +
 					'\nHumidity: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avehumidity + '%' +
 					'\nWind: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avewind.mph + ' mph' +
 					'\nChance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].pop +
