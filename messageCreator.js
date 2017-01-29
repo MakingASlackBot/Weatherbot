@@ -34,7 +34,7 @@ var parseWeatherMessage = function(bot,message,controller,location,parsedData){
 			bot.reply(message, '```' + location[0].toUpperCase() + 
 			'\nTemperature: ' + parsedData.current_observation.temp_f + '° F' + 
 			'\nHumidity: ' + parsedData.current_observation.relative_humidity + 
-			'\nDewpoint: ' + parsedData.current_observation.dewpoint_f + ' ° F' + 
+			'\nDewpoint: ' + parsedData.current_observation.dewpoint_f + '° F' + 
 			'\nWind: ' + parsedData.current_observation.wind_mph + ' mph' + 
 			'\nCurrent Conditions: ' + parsedData.current_observation.weather + '```'
 			);				
@@ -53,8 +53,8 @@ var parseForecastMessage = function(bot,message,controller,location,parsedData){
 			controller.storage.users.get(message.user, function(err, user) {        
 				bot.reply(message, 'Today\'s ' + location[0].toUpperCase() + ' forecast: \n```' + 
 					'Conditions: ' + parsedData.forecast.simpleforecast.forecastday[0].conditions +
-					'\nHigh: ' + parsedData.forecast.simpleforecast.forecastday[0].high.fahrenheit +
-					'\nLow: ' + parsedData.forecast.simpleforecast.forecastday[0].low.fahrenheit + 
+					'\nHigh: ' + parsedData.forecast.simpleforecast.forecastday[0].high.fahrenheit + '° F' + 
+					'\nLow: ' + parsedData.forecast.simpleforecast.forecastday[0].low.fahrenheit +  '° F' + 
 					'\nHumidity ' + parsedData.forecast.simpleforecast.forecastday[0].avehumidity + '%' +
 					'\nWind: ' + parsedData.forecast.simpleforecast.forecastday[0].avewind.mph + ' mph' +
 					'\nChance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[0].pop + 
@@ -66,8 +66,8 @@ var parseForecastMessage = function(bot,message,controller,location,parsedData){
 			controller.storage.users.get(message.user, function(err, user) {       
 				bot.reply(message, location[0].toUpperCase() + ' forecast for ' + location[2] + ' days from now: \n```' + 
 					'Conditions: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].conditions + 
-					'\nHigh: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].high.fahrenheit +
-					'\nLow: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].low.fahrenheit +
+					'\nHigh: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].high.fahrenheit + '° F' + 
+					'\nLow: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].low.fahrenheit + '° F' + 
 					'\nHumidity: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avehumidity + '%' +
 					'\nWind: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].avewind.mph + ' mph' +
 					'\nChance of precipitation: ' + parsedData.forecast.simpleforecast.forecastday[location[2]].pop +
