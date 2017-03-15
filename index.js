@@ -48,7 +48,7 @@ controller.hears(['weatherbot help', 'help weatherbot','wb help'], ['ambient'], 
 
 //help direct message
 controller.hears(['help'], ['direct_message'], function (bot, message){
-	 bot.reply(message, 'Sup :sunglasses:')
+	 bot.reply(message, 'Sup :sunglasses: :sun:')
   bot.reply(message, 'If you want me to tell you the weather, just say "weatherbot, weather in <city>, <state>", or "weatherbot, <city>, <state> weather".')
   bot.reply(message, 'Or just "wb, <city>, <state>')
 })
